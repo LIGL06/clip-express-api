@@ -15,6 +15,19 @@ router.get('/', (req, res, next) => {
   });
 });
 
+router.get('/balance', (req, res, next) => {
+  const { merchant } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
+  merchant.get(function(error, merchant){
+    if (error) {
+      console.error(error);
+      res.status(403).send('Openpay error');
+    } else {
+      console.log(merchant);
+      res.send(merchant);
+    }
+  });
+});
+
 router.post('/', (req, res, next) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
   const {card_number, expiration, cvv2, device_session_id, description, amount} = req.body;
@@ -31,11 +44,11 @@ router.post('/', (req, res, next) => {
       console.error(cardError);
       res.status(403).send('Openpay error');
     } else {
-      console.log(card);
       const chargeRequest = {
         source_id : card.id,
         method : 'card',
         currency : 'MXN',
+        order_id: `oid-${Math.floor(Math.random() * 100) + 1}`,
         amount,
         description,
         device_session_id,
@@ -46,6 +59,7 @@ router.post('/', (req, res, next) => {
         res.status(403).send('Openpay error');
       } else {
         console.log(charge);
+        res.send(charge);
        }
      });
     }
