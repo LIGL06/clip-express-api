@@ -35,7 +35,6 @@ router.post('/', (req, res, next) => {
       console.error(error);
       res.status(403).send('Openpay error');
     } else {
-      console.log(customer);
       res.send(customer);
     }
   });

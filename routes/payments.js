@@ -9,7 +9,6 @@ router.get('/', (req, res, next) => {
       console.error(error);
       res.status(403).send('Openpay error');
     } else {
-      console.log(list);
       res.send(list);
     }
   });
@@ -22,7 +21,6 @@ router.get('/balance', (req, res, next) => {
       console.error(error);
       res.status(403).send('Openpay error');
     } else {
-      console.log(merchant);
       res.send(merchant);
     }
   });
@@ -58,7 +56,6 @@ router.post('/', (req, res, next) => {
         console.error(chargeError);
         res.status(403).send('Openpay error');
       } else {
-        console.log(charge);
         res.send(charge);
        }
      });
