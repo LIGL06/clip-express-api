@@ -10,7 +10,7 @@ router.post('/', function (req, res, next) {
     }
     const token = jwt.sign({
       session
-    }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    }, process.env.JWT_SECRET, { expiresIn: '2d' });
     res.send({ token, session });
   } else {
     res.status(403).send('Incomplete Request')

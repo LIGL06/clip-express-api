@@ -30,7 +30,6 @@ router.post('/', (req, res, next) => {
     ...req.body,
     requires_account: false
   };
-  console.log(req.body);
   customers.create(customerRequest, (error, customer) => {
     if (error) {
       console.error(error);
@@ -44,17 +43,10 @@ router.post('/', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
-  const customerRequest = {
-    ...req.body,
-    requires_account: false
-  };
-  console.log(req.body);
-  customers.update(req.params.id, customerRequest, (error, customer) => {
+  customers.update(req.params.id, {...req.body}, (error, customer) => {
     if (error) {
-      console.error(error);
       res.status(403).send('Openpay error');
     } else {
-      console.log(customer);
       res.send(customer);
     }
   });
