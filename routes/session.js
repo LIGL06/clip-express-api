@@ -1,10 +1,9 @@
-const express = require('express');
+const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const router = express.Router();
 
-/* GET home page. */
-router.post('/', function (req, res, next) {
-  if (req.body.email !== undefined && req.body.name !== undefined) {
+router.post('/', (req, res) => {
+  const { email, name } = req.body;
+  if (email !== undefined && name !== undefined) {
     const session = {
       user: { ...req.body }
     }

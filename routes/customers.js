@@ -1,8 +1,7 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const Openpay = require('openpay');
-/* GET users listing. */
-router.get('/', (req, res, next) => {
+
+router.get('/', (req, res) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
   customers.list((error, list) => {
     if (error) {
@@ -13,7 +12,7 @@ router.get('/', (req, res, next) => {
   });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
   customers.get(req.params.id, (error, customer) => {
     if (error) {
@@ -24,7 +23,7 @@ router.get('/:id', (req, res, next) => {
   });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
   const customerRequest = {
     ...req.body,
@@ -39,9 +38,9 @@ router.post('/', (req, res, next) => {
   });
 })
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', (req, res) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
-  customers.update(req.params.id, {...req.body}, (error, customer) => {
+  customers.update(req.params.id, { ...req.body }, (error, customer) => {
     if (error) {
       res.status(403).send(error.description);
     } else {

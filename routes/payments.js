@@ -1,10 +1,9 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const Openpay = require('openpay');
-/* GET users listing. */
-router.get('/', (req, res, next) => {
-  const openpay = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
-  openpay.charges.list((error, list) => {
+
+router.get('/', (req, res) => {
+  const { charges } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
+  charges.list((error, list) => {
     if (error) {
       res.status(403).send(error.description);
     } else {
@@ -13,9 +12,9 @@ router.get('/', (req, res, next) => {
   });
 });
 
-router.get('/balance', (req, res, next) => {
+router.get('/balance', (req, res) => {
   const { merchant } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
-  merchant.get(function(error, merchant){
+  merchant.get(function (error, merchant) {
     if (error) {
       res.status(403).send(error.description);
     } else {
@@ -24,9 +23,9 @@ router.get('/balance', (req, res, next) => {
   });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
   const { customers } = new Openpay(process.env.OPEN_PAY_ID, process.env.OPEN_PAY_SK, false);
-  const {card_number, expiration, cvv2, device_session_id, description, amount, holder_name} = req.body;
+  const { card_number, expiration, cvv2, device_session_id, description, amount, holder_name } = req.body;
   const cardRequest = {
     card_number,
     holder_name,
@@ -40,21 +39,21 @@ router.post('/', (req, res, next) => {
       res.status(403).send(cardError.description);
     } else {
       const chargeRequest = {
-        source_id : card.id,
-        method : 'card',
-        currency : 'MXN',
+        source_id: card.id,
+        method: 'card',
+        currency: 'MXN',
         order_id: `oid-${Math.floor(Math.random() * 100) + 1}`,
         amount,
         description,
         device_session_id,
-     }
-     customers.charges.create(req.body.customer, chargeRequest, (chargeError, charge) => {
-      if (chargeError) {
-        res.status(403).send(chargeError.description);
-      } else {
-        res.send(charge);
-       }
-     });
+      }
+      customers.charges.create(req.body.customer, chargeRequest, (chargeError, charge) => {
+        if (chargeError) {
+          res.status(403).send(chargeError.description);
+        } else {
+          res.send(charge);
+        }
+      });
     }
   });
 });

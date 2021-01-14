@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(jwt({
   secret: process.env.JWT_SECRET,
   algorithms: ['HS256'],
-  credentialsRequired: false,
+  credentialsRequired: true,
   getToken: function fromHeaderOrQuerystring(req) {
     if (req.headers && req.headers['x-jwt-token']) {
       return req.headers['x-jwt-token'];
@@ -30,6 +30,11 @@ app.use(jwt({
     return null;
   }
 }).unless({ path: ['/session'] }));
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('invalid token');
+  }
+});
 
 app.use('/session', sessionRouter);
 app.use('/customers', usersRouter);
