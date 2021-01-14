@@ -40,7 +40,7 @@ app.use('/session', sessionRouter);
 app.use('/customers', usersRouter);
 app.use('/payments', paymentsRouter);
 
-app.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT || 5001, () => {
   console.info('Listening on PORT: ' + process.env.PORT);
 });
 
