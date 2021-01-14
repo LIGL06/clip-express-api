@@ -15,6 +15,7 @@ Make sure you have [Node.js](http://nodejs.org/) installed (12.11+).
 ```sh
 git clone https://github.com/LIGL06/clip-express-api.git
 cd clip-express-api
+cp .env.dev .env
 npm install
 npm start
 ```
